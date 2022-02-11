@@ -1,11 +1,12 @@
 var fs = require("fs");
 var csv = require("csv-parser");
-const results = [];
+let parser = require("csv-parser-sync-plus-promise");
+
 const array = [];
-const lengths = [];
 const receipts = [];
 const removeSpace = [];
 const newest = [];
+const difference = [];
 
 //----------------PROCESS----------------------
 
@@ -18,14 +19,7 @@ const newest = [];
 //----------------CORRECT----------------------
 
 //getting corred data to render with {id:... , price: ...}
-fs.createReadStream("prices.csv")
-  .pipe(csv({}))
-  .on("data", data => {
-    results.push(data);
-  })
-  .on("end", () => {
-    console.log("correct:", results);
-  });
+let result = parser.readCsvSync("prices.csv", "utf8");
 
 //----------------------------------------------
 //read all subfolders
@@ -62,4 +56,33 @@ for (let i = 0; i < newArr.length; i++) {
 removeSpace.map(d => {
   newest.push({ id: d[0], price: d[1] });
 });
-console.log(newest[3]);
+//all idx of formatted receipt
+for (let i = 0; i < newest.length; i++) {
+  //remove voided items
+  if (newest[i].id && !newest[i].price) {
+    newest.splice(i, 0);
+    newest.splice(i - 1, 2);
+  }
+  //remove any undefined id's
+  if (!newest[i].id) {
+    newest.splice(i, 1);
+  }
+  //all idx of correct prices
+  for (let j = 0; j < result.length; j++) {
+    //create new array of difference in prices
+    if (newest[i].id == result[j].id) {
+      if (result[j].price !== newest[i].price) {
+        difference.push({
+          id: newest[i].id,
+          diff:
+            Math.round(
+              (result[j].price - newest[i].price + Number.EPSILON) * 100
+            ) / 100
+        });
+      }
+      j++;
+    }
+  }
+}
+
+console.log(difference);
