@@ -1,70 +1,55 @@
-# Getting Started with Create React App
+The prices are wrong!
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Oh no! A team of accountants at a huge company have discovered that customers are occasionally being charged too much or too little for various products. They've written you an angry email about it, and now you're tasked with coming up with a data report about the situation.
 
-## Available Scripts
+They've sent you a directory containing the receipts in which they suspect prices are wrong and a CSV file containing the product codes and the correct price each one should have.
 
-In the project directory, you can run:
+A receipt is just a plaintext file with rows formatted like:
 
-### `npm start`
+A product name
+A product code
+A price
+A random flag character (this exists for no other reason than to confuse you)
+There's also a store number listed up top.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Sometimes, items might be voided. This means that the previous line is null and void, and the customer didn't pay for it, so it won't reflect in the total. Your program should ignore these voided products. Note: all void messages will be in the this format **_ VOIDED PRODUCT [Product Code] _**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+So, about that report...
 
-### `npm test`
+The angry accountants would like you to write a program that outputs a CSV file with all the products that have been mischarged along with a count of the mischarges and a total of the mischarges:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Product Code Count Total
+123 23 -32.56
+454 1 +100.34
+Any products that have not had any wrong charges should not be in this list. Please sort the list from low to high so the largest losses are first in the file.
 
-### `npm run build`
+Your program should take in a parameter for directory so that the angry accountants can run it over and over again on a different set of receipts if they want.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Instructions for submission
+Create a application for the challenge in the programming language of your choice.
+Containerize your application using docker and provide instructions on how to run the image.
+The application should write the csv file locally and the application instructions should include directions for mounting a host path so that the user can obtain the csv output.
+Please create a branch off of main and commit all of your code into that.
+Name the branch [Your last name]-[Your first name].
+If you have any questions please feel free to reach out to jonathan.morales@evolvconsulting.com.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+------------ Process --------------
+// 1. Add data file to app
+// 2. Figure out best practice for iterating through plain text files
+------ Possibilites -------
+//// I think it's going to be using
+fetch(data)
+.then(res => res.text())
+.then(d => d.setReceipts(d))
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+//// Have to figure out how to iterate through all files in each subDirectory though.
+//// 1. Turn all .txt files into JSON files
+//// 2. Just iterate through all textfiles
+//// 3. Maybe keep iterating through all textfiles and add them to a JSON file (feels least efficient)
 
-### `npm run eject`
+---
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+// 3. Create an array with correct product values to compare
+// 4. Compare all product values with variable created in step 3
+// 5. Capture all products that were incorrectly charged and add to the value of that product, ex(Oranges: +$31, -> +$35) due to overcharging
+// 6.
