@@ -26,18 +26,8 @@ function App() {
       });
   }, []);
 
-  let id = null;
-
-  function getData() {
-    id = data.map(d => console.log(d.id, d.diff));
-  }
-
   return (
-    <div
-      onClick={() => {
-        getData();
-      }}
-    >
+    <div>
       <div
         style={{
           border: "solid 1px black",
